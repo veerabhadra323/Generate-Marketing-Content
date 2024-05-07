@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Content Generator</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <h1>Marketing Content Generator</h1>
+    <form id="content-form">
+        <label for="format">Format:</label>
+        <select id="format" name="format" required>
+            <option value="linkedin post">LinkedIn Post</option>
+            <option value="blog post intro">Instagram Post Intro</option>
+            <option value="social media post">Social Media Post</option>
+            </select>
+
+        <label for="topic">Topic:</label>
+        <input type="text" id="topic" name="topic" required>
+
+
+
+        <label for="length">Length (words):</label>
+        <input type="number" id="length" name="length" min="50" max="150">
+
+        <button type="submit">Generate Content</button>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+const form = document.getElementById('content-form');
+const output = document.getElementById('output');
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  // Create a plain JavaScript object from form data
+  const data = {
+    topic: document.getElementById('topic').value,
+    format: document.getElementById('format').value,
+    length: document.getElementById('length').value
+  };
+
+  // Convert the object to JSON string
+  const jsonData = JSON.stringify(data);
+
+  const fetchOptions = {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  fetch('/generate_content', fetchOptions)
+  .then(response => response.json())
+  .then(data => {
+    output.textContent = data.text;
+  })
+  .catch(error => {
+    console.error(error);
+    output.textContent = 'Error generating content.';
+  });
+});
+
+
+    </script>
+</body>
+</html>
